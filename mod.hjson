@@ -17,4 +17,4 @@ description: "Projeto experimental de variantes alternativas e instáveis dos bl
 version: 0.0.1
 
 #the minimum game build required to run this mod
-minGameVersion: 146
+minGameVersion: 150
