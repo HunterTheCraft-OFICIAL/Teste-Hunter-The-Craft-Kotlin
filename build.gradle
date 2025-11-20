@@ -32,10 +32,25 @@ dependencies{
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
 }
 
-compileKotlin{
+// --------------------------------------------------------
+// --- FIX: Resolve JVM Target Inconsistency (1.8 vs 17) ---
+// Esta configuração garante que tanto o Java quanto o Kotlin compilem para o Java 8 (1.8),
+// resolvendo o erro "Compatibilidade inconsistente do alvo JVM".
+
+// 1. Força todas as tarefas de compilação Java a usar 1.8
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+// 2. Força todas as tarefas de compilação Kotlin a usar o JVM Target 1.8
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+// --------------------------------------------------------
 
 task jarAndroid{
     dependsOn "jar"
@@ -84,7 +99,8 @@ task deploy(type: Jar){
     doLast{
         delete{
             delete "$buildDir/libs/${project.archivesBaseName}Desktop.jar"
-            delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
+      
+      delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
         }
     }
 }
