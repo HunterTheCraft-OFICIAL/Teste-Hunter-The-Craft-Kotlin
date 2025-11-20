@@ -1,38 +1,38 @@
 package paradox
 
-import arc.*
-import arc.util.*
-import mindustry.game.EventType.*
-import mindustry.mod.*
-//import mindustry.mod.Mod
-import mindustry.ui.dialogs.*
+import arc.util.Log
+import mindustry.mod.Mod
+// Importações necessárias para criar o bloco:
+import mindustry.world.blocks.defense.Wall 
+import mindustry.type.Category 
+import mindustry.content.Blocks 
+import mindustry.content.Items 
 
-
-
+// Definição do Bloco (Criação da instância)
+val cheapCopperWall = Wall("cheap-copper-wall") 
 
 class ParadoxMod : Mod(){
 
     init{
-        Log.info("Loaded ExampleKotlinMod constructor.")
-
-        //listen for game load event
-        Events.on(ClientLoadEvent::class.java){
-            //show dialog upon startup
-            Time.runTask(10f){
-                BaseDialog("frog").apply{
-                    cont.apply{
-                        add("behold").row()
-                        //mod sprites are prefixed with the mod name (this mod is called 'example-kotlin-mod' in its config)
-                        image(Core.atlas.find("example-kotlin-mod-frog")).pad(20f).row()
-                        button("I see"){ hide() }.size(100f, 50f)
-                    }
-                    show()
-                }
-            }
-        }
+        // Limpando o código do sapo para evitar o pop-up, se desejar.
+        Log.info("Loaded ParadoxMod constructor.")
     }
 
     override fun loadContent(){
-        Log.info("Loading some example content.")
+        Log.info("Loading Paradox Mod content (Muro de Cobre Barato).")
+        
+        // CÓDIGO DO MURO DE COBRE BARATO (Injeção de Conteúdo)
+        cheapCopperWall.apply {
+            health = 180f // Reduzido em comparação ao Vanilla (320)
+            size = 1
+            category = Category.defense
+            research(Blocks.copperWall) // Pesquisado após o bloco vanilla
+            
+            // Requisitos: APENAS 5 Cobre (Vanilla: 6)
+            requirements(Category.defense, with(Items.copper, 5))
+            
+            localizedName = "Muro de Cobre Barato"
+            description = "Um muro improvisado, barato e frágil. Primeiro bloco Paradox Mod."
+        }
     }
 }
